@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/silaslira/ezops-test-silas#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mongoose": "^5.2.14"
   }
 }
