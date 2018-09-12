@@ -1,16 +1,18 @@
 /**
  *  Imports
  */
+
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var io = require('socket.io');
 
+
 /**
  * Set up
  */
-var app = express();
 
+var app = express();
 
 var dbUrl = 'mongodb://messages:M2r4T7aA3G2@ds255332.mlab.com:55332/messages';
 
@@ -20,14 +22,15 @@ mongoose.connect(dbUrl , (err) => {
     console.log('mongodb connected', err);
 });
 
-
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
 /**
  * API
  */
+
 app.get('/messages', (req, res) => {
     Message.find({},(err, messages)=> {
         res.send(messages);
