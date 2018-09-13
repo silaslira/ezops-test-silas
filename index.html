@@ -35,18 +35,20 @@
     var socket = io();
     socket.on('message', addMessages);
 
-    function addMessages(message){
+    var baseUrl = location.protocol + "//" + location.hostname + ":" + location.port;
+
+        function addMessages(message){
         $("#messages").append(`
       <h4> ${message.name} </h4>
       <p>  ${message.message} </p>`)
     }
     function getMessages(){
-        $.get('http://localhost:3000/messages', (data) => {
+        $.get(`${baseUrl}/messages`, (data) => {
             data.forEach(addMessages);
     })
     }
     function sendMessage(message){
-        $.post('http://localhost:3000/messages', message)
+        $.post(`${baseUrl}/messages`, message)
     }
 
 </script>
