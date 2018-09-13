@@ -60,7 +60,7 @@
     }
 
     function deleteMessage(messageId) {
-        if (confirm(`Do you really want to delete this message id ${messageId}?`)) {
+        if (confirm(`Teste ${messageId}?`)) {
             $.ajax({
                 url: `${baseUrl}/messages/${messageId}`,
                 type: 'DELETE',
