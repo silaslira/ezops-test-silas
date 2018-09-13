@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 </head>
 <body>
@@ -12,9 +12,9 @@
     <div class="jumbotron">
         <h1 class="display-4">Send Message</h1>
         <br>
-        <input id = "name" class="form-control" placeholder="Name">
+        <input id="name" class="form-control" placeholder="Name">
         <br>
-        <textarea id = "message" class="form-control" placeholder="Your Message Here">
+        <textarea id="message" class="form-control" placeholder="Your Message Here">
 </textarea>
         <br>
         <button id="send" class="btn btn-success">Send</button>
@@ -24,31 +24,55 @@
 </div>
 <script>
     $(() => {
-        $("#send").click(()=>{
+        $("#send").click(() => {
             sendMessage({
                 name: $("#name").val(),
-                message:$("#message").val()});
-        })
+                message: $("#message").val()
+            });
+        });
         getMessages()
     });
 
     var socket = io();
+
     socket.on('message', addMessages);
+    socket.on('deletion', removeFromList);
 
     var baseUrl = location.protocol + "//" + location.hostname + ":" + location.port;
 
-        function addMessages(message){
+    function addMessages(message) {
         $("#messages").append(`
-      <h4> ${message.name} </h4>
-      <p>  ${message.message} </p>`)
+            <div id="container_${message._id}">
+                  <h4> ${message.name} <small id="${message._id}" style="cursor: pointer;" onclick="deleteMessage(this.id)">(delete)</small></h4>
+                  <p>  ${message.message} </p>
+            </div>
+        `)
     }
-    function getMessages(){
+
+    function getMessages() {
         $.get(`${baseUrl}/messages`, (data) => {
             data.forEach(addMessages);
-    })
+        })
     }
-    function sendMessage(message){
+
+    function sendMessage(message) {
         $.post(`${baseUrl}/messages`, message)
+    }
+
+    function deleteMessage(messageId) {
+        if (confirm(`Do you really want to delete this message id ${messageId}?`)) {
+            $.ajax({
+                url: `${baseUrl}/messages/${messageId}`,
+                type: 'DELETE',
+                success: function (result) {
+                    removeFromList(messageId);
+                }
+            });
+        }
+    }
+
+    function removeFromList (messageId) {
+        $(`#container_${messageId}`).remove();
     }
 
 </script>
